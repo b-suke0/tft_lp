@@ -29,28 +29,63 @@
     <style>
         body {
             font-family: 'Noto Sans JP', sans-serif;
-            background-image: url('ChatGPT Image 2025年6月25日 13_44_50.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed; /* 背景固定でパララックス効果 */
-            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* スマホ専用の背景設定 */
-        @media (max-width: 768px) {
+        /* デスクトップ用背景 */
+        @media (min-width: 769px) {
             body {
+                background-image: url('ChatGPT Image 2025年6月25日 13_44_50.png');
                 background-size: cover;
                 background-position: center;
-                background-attachment: fixed; /* スマホでも固定背景 */
+                background-attachment: fixed;
+                background-repeat: no-repeat;
             }
         }
 
-        /* iOS Safari対応 */
-        @supports (-webkit-touch-callout: none) {
+        /* モバイル用背景（擬似要素で実装） */
+        @media (max-width: 768px) {
+            body::before {
+                content: '';
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 120vh;
+                background-image: url('ChatGPT Image 2025年6月25日 13_44_50.png');
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                z-index: -1;
+                will-change: transform;
+                transform: translateZ(0); /* ハードウェアアクセラレーション */
+                -webkit-transform: translateZ(0);
+            }
+            
+            /* iOS Safari専用の調整 */
             body {
-                background-attachment: scroll;
-                background-size: 100% auto;
+                -webkit-overflow-scrolling: touch;
+                background: #0D0D0D; /* フォールバック背景色 */
+            }
+        }
+
+        /* iOS Safari検出とフォールバック */
+        @supports (-webkit-touch-callout: none) and (not (translate: none)) {
+            @media (max-width: 768px) {
+                body {
+                    background-image: url('ChatGPT Image 2025年6月25日 13_44_50.png');
+                    background-size: cover;
+                    background-position: center;
+                    background-attachment: scroll;
+                    background-repeat: no-repeat;
+                }
+                
+                body::before {
+                    display: none;
+                }
             }
         }
         .gradient-border {
@@ -598,34 +633,49 @@
         createMusicPlayer(1);
         createMusicPlayer(2);
 
-        // Enhanced Parallax Effect
-        let ticking = false;
+        // モバイル専用パララックス効果
+        function initMobileParallax() {
+            if (window.innerWidth <= 768) {
+                let ticking = false;
 
-        function updateParallax() {
-            const scrolled = window.pageYOffset;
-            const parallax = document.body;
-            const speed = scrolled * 0.5;
-            
-            // パララックス効果（背景が少しずつ移動）
-            parallax.style.transform = `translate3d(0, ${speed}px, 0)`;
-            
-            ticking = false;
-        }
+                function updateMobileParallax() {
+                    const scrolled = window.pageYOffset;
+                    const backgroundElement = document.body;
+                    const speed = scrolled * 0.3; // より控えめなスピード
+                    
+                    // モバイル用の背景要素を動かす
+                    if (backgroundElement && backgroundElement.style) {
+                        backgroundElement.style.setProperty('--bg-transform', `translateY(${speed}px)`);
+                    }
+                    
+                    ticking = false;
+                }
 
-        function requestTick() {
-            if (!ticking) {
-                requestAnimationFrame(updateParallax);
-                ticking = true;
+                function requestMobileTick() {
+                    if (!ticking) {
+                        requestAnimationFrame(updateMobileParallax);
+                        ticking = true;
+                    }
+                }
+
+                // スクロールイベント（パッシブで性能向上）
+                window.addEventListener('scroll', requestMobileTick, { passive: true });
+                
+                // タッチイベントの最適化
+                document.addEventListener('touchstart', function() {}, { passive: true });
+                document.addEventListener('touchmove', function() {}, { passive: true });
             }
         }
 
-        // スクロールイベントリスナー
-        window.addEventListener('scroll', requestTick);
-
-        // iOS Safari対応のスムーススクロール
-        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-            document.addEventListener('touchstart', function() {}, {passive: true});
-        }
+        // ページロード時にモバイルパララックスを初期化
+        document.addEventListener('DOMContentLoaded', initMobileParallax);
+        
+        // リサイズ時の再初期化
+        window.addEventListener('resize', function() {
+            // デバウンス処理
+            clearTimeout(window.resizeTimeout);
+            window.resizeTimeout = setTimeout(initMobileParallax, 250);
+        });
     </script>
 </body>
 </html>
