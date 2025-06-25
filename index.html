@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFT Crew - 大人のストリートチーム</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'deep-black': '#0D0D0D',
+                        'gold': '#D4AF37',
+                        'gold-light': '#E6C757',
+                        'gray-text': '#B3B3B3',
+                        'card-bg': '#1A1A1A'
+                    },
+                    fontFamily: {
+                        'japanese': ['Noto Sans JP', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .gradient-border {
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            padding: 2px;
+            border-radius: 16px;
+        }
+        .card-content {
+            background: #1A1A1A;
+            border-radius: 14px;
+            height: 100%;
+        }
+        .member-photo {
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            padding: 3px;
+            border-radius: 50%;
+        }
+        .member-photo img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .gold-badge {
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            color: #0D0D0D;
+            font-weight: 700;
+        }
+        .cta-button {
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+        }
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.4);
+        }
+        .section-title {
+            background: linear-gradient(135deg, #D4AF37, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        .animate-float:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+        .animate-float:nth-child(3) {
+            animation-delay: 1s;
+        }
+        .animate-float:nth-child(4) {
+            animation-delay: 1.5s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-deep-black">
+    <!-- TFT Crew Section -->
+    <section class="py-20 px-4 bg-deep-black min-h-screen flex items-center">
+        <div class="max-w-6xl mx-auto w-full">
+            <!-- Section Title -->
+            <div class="text-center mb-16">
+                <h2 class="text-5xl md:text-6xl font-black section-title mb-4">
+                    Meet the TFT Crew
+                </h2>
+                <div class="w-24 h-1 bg-gradient-to-r from-gold to-gold-light mx-auto mb-8"></div>
+                <p class="text-gray-text text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+                    個性豊かな4人が織りなす<br>
+                    最強の仲間グループ
+                </p>
+                
+                <!-- Music Player -->
+                <div class="mt-12 max-w-2xl mx-auto">
+                    <h3 class="text-gold text-xl font-bold mb-6">🎵 TFT テーマソング</h3>
+                    <div class="space-y-4">
+                        <!-- Track 1 -->
+                        <div class="bg-card-bg rounded-xl p-6 border border-gold/20">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="text-left">
+                                    <h4 class="text-white font-bold text-lg">Golden Street ～始まりの道～</h4>
+                                    <p class="text-gray-text text-sm">TFT Official Theme</p>
+                                </div>
+                                <button id="play-btn-1" class="play-button bg-gold hover:bg-gold-light text-deep-black p-3 rounded-full transition-all duration-300 transform hover:scale-110">
+                                    <span class="play-icon">▶️</span>
+                                </button>
+                            </div>
+                            <audio id="audio-1" preload="metadata">
+                                <source src="golden-street-～始まりの道～.mp3" type="audio/mpeg">
+                                <p class="text-red-400">お使いのブラウザは音声再生に対応していません。</p>
+                            </audio>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-gray-text text-xs" id="current-time-1">0:00</span>
+                                <div class="flex-1 bg-gray-700 rounded-full h-2 relative">
+                                    <div id="progress-1" class="bg-gradient-to-r from-gold to-gold-light h-2 rounded-full w-0 transition-all duration-300"></div>
+                                </div>
+                                <span class="text-gray-text text-xs" id="duration-1">0:00</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Track 2 -->
+                        <div class="bg-card-bg rounded-xl p-6 border border-gold/20">
+                            <div class="flex items-center justify-between mb-3">
+                                <div class="text-left">
+                                    <h4 class="text-white font-bold text-lg">TFT Forever</h4>
+                                    <p class="text-gray-text text-sm">Crew Anthem</p>
+                                </div>
+                                <button id="play-btn-2" class="play-button bg-gold hover:bg-gold-light text-deep-black p-3 rounded-full transition-all duration-300 transform hover:scale-110">
+                                    <span class="play-icon">▶️</span>
+                                </button>
+                            </div>
+                            <audio id="audio-2" preload="metadata">
+                                <source src="TFT-forever .mp3" type="audio/mpeg">
+                                <p class="text-red-400">お使いのブラウザは音声再生に対応していません。</p>
+                            </audio>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-gray-text text-xs" id="current-time-2">0:00</span>
+                                <div class="flex-1 bg-gray-700 rounded-full h-2 relative">
+                                    <div id="progress-2" class="bg-gradient-to-r from-gold to-gold-light h-2 rounded-full w-0 transition-all duration-300"></div>
+                                </div>
+                                <span class="text-gray-text text-xs" id="duration-2">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Members Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <!-- Member 1: かんすけ -->
+                <div class="gradient-border animate-float card-hover">
+                    <div class="card-content p-8">
+                        <div class="flex flex-col items-center text-center">
+                            <!-- Photo -->
+                            <div class="member-photo w-32 h-32 mb-6">
+                                <img src="70170472-D281-408E-9661-D029C0A3172C 3.jpg" alt="かんすけ" class="w-full h-full object-cover">
+                            </div>
+                            
+                            <!-- Name -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                                かんすけ
+                            </h3>
+                            
+                            <!-- Role Badge -->
+                            <span class="gold-badge px-4 py-2 rounded-full text-sm font-bold mb-3">
+                                大将
+                            </span>
+                            
+                            <!-- Location Tag -->
+                            <span class="bg-gray-700 text-gray-text px-3 py-1 rounded-full text-sm mb-6">
+                                📍 東京
+                            </span>
+                            
+                            <!-- Catchcopy -->
+                            <p class="text-gray-text text-base leading-relaxed">
+                                目配せひとつで場の空気を操る<br>
+                                自然と輪の中心にいるリーダー
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 2: しんいち -->
+                <div class="gradient-border animate-float card-hover">
+                    <div class="card-content p-8">
+                        <div class="flex flex-col items-center text-center">
+                            <!-- Photo -->
+                            <div class="member-photo w-32 h-32 mb-6">
+                                <img src="70170472-D281-408E-9661-D029C0A3172C 2.jpg" alt="しんいち" class="w-full h-full object-cover">
+                            </div>
+                            
+                            <!-- Name -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                                しんいち
+                            </h3>
+                            
+                            <!-- Role Badge -->
+                            <span class="gold-badge px-4 py-2 rounded-full text-sm font-bold mb-3">
+                                参謀
+                            </span>
+                            
+                            <!-- Location Tag -->
+                            <span class="bg-gray-700 text-gray-text px-3 py-1 rounded-full text-sm mb-6">
+                                📍 富山
+                            </span>
+                            
+                            <!-- Catchcopy -->
+                            <p class="text-gray-text text-base leading-relaxed">
+                                冷静沈着な戦略家<br>
+                                縁の下の力持ち
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 3: びーすけ -->
+                <div class="gradient-border animate-float card-hover">
+                    <div class="card-content p-8">
+                        <div class="flex flex-col items-center text-center">
+                            <!-- Photo -->
+                            <div class="member-photo w-32 h-32 mb-6">
+                                <img src="70170472-D281-408E-9661-D029C0A3172C.jpg" alt="びーすけ" class="w-full h-full object-cover">
+                            </div>
+                            
+                            <!-- Name -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                                びーすけ
+                            </h3>
+                            
+                            <!-- Role Badge -->
+                            <span class="gold-badge px-4 py-2 rounded-full text-sm font-bold mb-3">
+                                心臓部
+                            </span>
+                            
+                            <!-- Location Tag -->
+                            <span class="bg-gray-700 text-gray-text px-3 py-1 rounded-full text-sm mb-6">
+                                📍 福井
+                            </span>
+                            
+                            <!-- Catchcopy -->
+                            <p class="text-gray-text text-base leading-relaxed">
+                                声が響けば空気が明るくなる<br>
+                                TFTのムードメーカー
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Member 4: あつき -->
+                <div class="gradient-border animate-float card-hover">
+                    <div class="card-content p-8">
+                        <div class="flex flex-col items-center text-center">
+                            <!-- Photo -->
+                            <div class="member-photo w-32 h-32 mb-6">
+                                <div class="w-full h-full bg-gradient-to-br from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
+                                    <span class="text-4xl">✨</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Name -->
+                            <h3 class="text-2xl md:text-3xl font-bold text-white mb-4">
+                                あつき
+                            </h3>
+                            
+                            <!-- Role Badge -->
+                            <span class="gold-badge px-4 py-2 rounded-full text-sm font-bold mb-3">
+                                スパイス
+                            </span>
+                            
+                            <!-- Location Tag -->
+                            <span class="bg-gray-700 text-gray-text px-3 py-1 rounded-full text-sm mb-6">
+                                📍 福井
+                            </span>
+                            
+                            <!-- Catchcopy -->
+                            <p class="text-gray-text text-base leading-relaxed">
+                                突然の降臨で場を変える<br>
+                                独特な空気感の魔術師
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Button -->
+            <div class="text-center">
+                <button class="cta-button text-deep-black font-bold text-lg md:text-xl px-12 py-4 rounded-full inline-flex items-center gap-3 group">
+                    <span class="text-2xl">💬</span>
+                    <span>LINEで参加してみる</span>
+                    <span class="transform transition-transform group-hover:translate-x-1">→</span>
+                </button>
+                <p class="text-gray-text text-sm mt-4">
+                    TFTクルーと一緒に新しいステージへ
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 pointer-events-none z-0">
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-20 left-20 w-2 h-2 bg-gold rounded-full animate-pulse"></div>
+            <div class="absolute top-40 right-32 w-1 h-1 bg-gold-light rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute bottom-32 left-1/4 w-1.5 h-1.5 bg-gold rounded-full animate-pulse" style="animation-delay: 2s;"></div>
+            <div class="absolute bottom-20 right-20 w-2 h-2 bg-gold-light rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+        </div>
+    </div>
+
+    <script>
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe all member cards
+        document.querySelectorAll('.gradient-border').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(50px)';
+            card.style.transition = 'all 0.6s ease';
+            observer.observe(card);
+        });
+
+        // CTA Button click handler
+        document.querySelector('.cta-button').addEventListener('click', function() {
+            // ここにLINE参加の処理を実装
+            alert('LINEへの参加機能を実装してください');
+        });
+
+        // Music Player functionality
+        let currentlyPlaying = null;
+
+        function createMusicPlayer(trackNumber) {
+            const audio = document.getElementById(`audio-${trackNumber}`);
+            const playBtn = document.getElementById(`play-btn-${trackNumber}`);
+            const progress = document.getElementById(`progress-${trackNumber}`);
+            const currentTime = document.getElementById(`current-time-${trackNumber}`);
+            const duration = document.getElementById(`duration-${trackNumber}`);
+            const playIcon = playBtn.querySelector('.play-icon');
+
+            // Format time helper
+            function formatTime(seconds) {
+                const mins = Math.floor(seconds / 60);
+                const secs = Math.floor(seconds % 60);
+                return `${mins}:${secs.toString().padStart(2, '0')}`;
+            }
+
+            // Load metadata
+            audio.addEventListener('loadedmetadata', function() {
+                duration.textContent = formatTime(audio.duration);
+                console.log(`Track ${trackNumber} loaded successfully: ${audio.src}`);
+            });
+
+            // Error handling
+            audio.addEventListener('error', function(e) {
+                console.error(`Error loading track ${trackNumber}:`, e);
+                duration.textContent = 'エラー';
+                playBtn.style.opacity = '0.5';
+                playBtn.style.cursor = 'not-allowed';
+            });
+
+            // Can play event
+            audio.addEventListener('canplay', function() {
+                console.log(`Track ${trackNumber} ready to play`);
+                playBtn.style.opacity = '1';
+                playBtn.style.cursor = 'pointer';
+            });
+
+            // Update progress
+            audio.addEventListener('timeupdate', function() {
+                const progressPercent = (audio.currentTime / audio.duration) * 100;
+                progress.style.width = progressPercent + '%';
+                currentTime.textContent = formatTime(audio.currentTime);
+            });
+
+            // Play/Pause functionality
+            playBtn.addEventListener('click', function() {
+                if (currentlyPlaying && currentlyPlaying !== audio) {
+                    currentlyPlaying.pause();
+                    const otherTrack = currentlyPlaying === document.getElementById('audio-1') ? 2 : 1;
+                    document.getElementById(`play-btn-${otherTrack}`).querySelector('.play-icon').textContent = '▶️';
+                }
+
+                if (audio.paused) {
+                    audio.play();
+                    playIcon.textContent = '⏸️';
+                    currentlyPlaying = audio;
+                    playBtn.classList.add('animate-pulse');
+                } else {
+                    audio.pause();
+                    playIcon.textContent = '▶️';
+                    currentlyPlaying = null;
+                    playBtn.classList.remove('animate-pulse');
+                }
+            });
+
+            // Reset when ended
+            audio.addEventListener('ended', function() {
+                playIcon.textContent = '▶️';
+                progress.style.width = '0%';
+                currentTime.textContent = '0:00';
+                currentlyPlaying = null;
+                playBtn.classList.remove('animate-pulse');
+            });
+
+            // Click on progress bar to seek
+            progress.parentElement.addEventListener('click', function(e) {
+                const rect = this.getBoundingClientRect();
+                const clickX = e.clientX - rect.left;
+                const width = rect.width;
+                const clickPercent = clickX / width;
+                audio.currentTime = clickPercent * audio.duration;
+            });
+        }
+
+        // Initialize both music players
+        createMusicPlayer(1);
+        createMusicPlayer(2);
+    </script>
+</body>
+</html>
