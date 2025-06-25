@@ -32,7 +32,7 @@
             background-image: url('ChatGPT Image 2025年6月25日 13_44_50.png');
             background-size: cover;
             background-position: center;
-            background-attachment: scroll; /* スマホでは scroll に変更 */
+            background-attachment: fixed; /* 背景固定でパララックス効果 */
             background-repeat: no-repeat;
             min-height: 100vh;
         }
@@ -41,8 +41,16 @@
         @media (max-width: 768px) {
             body {
                 background-size: cover;
-                background-position: center top;
+                background-position: center;
+                background-attachment: fixed; /* スマホでも固定背景 */
+            }
+        }
+
+        /* iOS Safari対応 */
+        @supports (-webkit-touch-callout: none) {
+            body {
                 background-attachment: scroll;
+                background-size: 100% auto;
             }
         }
         .gradient-border {
@@ -589,6 +597,35 @@
         // Initialize both music players
         createMusicPlayer(1);
         createMusicPlayer(2);
+
+        // Enhanced Parallax Effect
+        let ticking = false;
+
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.body;
+            const speed = scrolled * 0.5;
+            
+            // パララックス効果（背景が少しずつ移動）
+            parallax.style.transform = `translate3d(0, ${speed}px, 0)`;
+            
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+
+        // スクロールイベントリスナー
+        window.addEventListener('scroll', requestTick);
+
+        // iOS Safari対応のスムーススクロール
+        if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+            document.addEventListener('touchstart', function() {}, {passive: true});
+        }
     </script>
 </body>
 </html>
